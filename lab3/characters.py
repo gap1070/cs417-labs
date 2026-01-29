@@ -44,13 +44,34 @@ class Mage(Character):
     def summon_power(self):
         return f"{self.name} channels {self.special_power}! Enemies are stunned!"
     
+# Create a Character Subclass    
 class Ranger(Character):
     def _init__(self, name):
         super().__init__(name, "Animal Partner")
 
     def summon_power(self):
         return f"{self.name} calls for his {self.special_power}! A wolf who helps him in battle!"
-    
+
+# Create weapons 
 crossbow = Weapon("Rapid Crossbow", 15)
 dagger = Weapon("Battle Dagger", 18)
 sword = Weapon("Prestige Sword", 25)
+
+# Build an army
+army = [
+    Warrior("Thorfin"), 
+    Mage("Gandalf"),
+    Ranger("Hercules")
+]
+
+# equip each character with a specific weapon 
+army[0].eqiup_weapon(sword)             # Warrior gets a sword
+army[1].equid_weapon(crossbow)          # Mage gets a crossbow
+army[2].equip_weapon(dagger)            # Ranger gets a dagger
+
+print("My Army")
+for character in army:
+    print(character)
+    print(character.get_status())
+    print(character.summon_power())
+    print()
