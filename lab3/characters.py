@@ -50,3 +50,7 @@ class Ranger(Character):
 
     def summon_power(self):
         return f"{self.name} calls for his {self.special_power}! A wolf who helps him in battle!"
+    
+crossbow = Weapon("Rapid Crossbow", 15)
+dagger = Weapon("Battle Dagger", 18)
+sword = Weapon("Prestige Sword", 25)
