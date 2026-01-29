@@ -75,3 +75,16 @@ for character in army:
     print(character.get_status())
     print(character.summon_power())
     print()
+
+# weapon swapping demo
+print("Weapon Swap Demo")
+# takes the warrior, Thorfin, and swaps weapons 
+demo_character = army[0]
+
+# original weapon 
+demo_character.equip_weapon(sword)
+print(demo_character.attack())
+
+# swap from sword to a dagger 
+demo_character.equip_weapon(dagger)
+print(demo_character.attack())
