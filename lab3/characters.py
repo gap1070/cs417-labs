@@ -46,7 +46,7 @@ class Mage(Character):
     
 # Create a Character Subclass    
 class Ranger(Character):
-    def _init__(self, name):
+    def __init__(self, name):
         super().__init__(name, "Animal Partner")
 
     def summon_power(self):
@@ -65,11 +65,11 @@ army = [
 ]
 
 # equip each character with a specific weapon 
-army[0].eqiup_weapon(sword)             # Warrior gets a sword
-army[1].equid_weapon(crossbow)          # Mage gets a crossbow
+army[0].equip_weapon(sword)             # Warrior gets a sword
+army[1].equip_weapon(crossbow)          # Mage gets a crossbow
 army[2].equip_weapon(dagger)            # Ranger gets a dagger
 
-print("My Army")
+print("--- My Army ---")
 for character in army:
     print(character)
     print(character.get_status())
@@ -77,7 +77,7 @@ for character in army:
     print()
 
 # weapon swapping demo
-print("Weapon Swap Demo")
+print("--- Weapon Swap Demo ---")
 # takes the warrior, Thorfin, and swaps weapons 
 demo_character = army[0]
 
