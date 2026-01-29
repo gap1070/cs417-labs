@@ -88,3 +88,13 @@ print(demo_character.attack())
 # swap from sword to a dagger 
 demo_character.equip_weapon(dagger)
 print(demo_character.attack())
+
+# Reflection Comment
+# Equipment is modeled as composition instead of inheritance 
+# because characters are able to change weapons way more efficiently. 
+# Using inheritance would have it so you had to create seperate classes 
+# for every single weapon and character combination. 
+# Which leaves you with alot of classes, which is so unnessessary if you 
+# just use composition. Composition allows you to be way more flexable with it, 
+# since a character is allowed to equip, unequip, or swap their weapons, 
+# without having to make seperate classes. Which just makes your code way more maintainable. 
