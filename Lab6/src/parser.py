@@ -13,7 +13,10 @@ def parse_product_basic(response):
         >>> parse_product_basic(response)
         {"id": "prod_123", "name": "Headphones"}
     """
-    pass  # Your implementation here
+    return {
+        "id": response["id"],
+        "name": response["name"]
+    }
 
 
 def parse_availability(response):
