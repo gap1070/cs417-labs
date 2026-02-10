@@ -1,3 +1,6 @@
+from stack import Stack 
+from json_validator import validate
+
 def validate(json_string):
     # Initialize line and column counters
     line = 1
