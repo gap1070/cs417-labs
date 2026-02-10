@@ -1,68 +1,29 @@
-from stack import Stack 
+import sys
+import os
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../src')))
+
 from json_validator import validate
 
-def validate(json_string):
-    # Initialize line and column counters
-    line = 1
-    col = 0
+def read_file(path):
+    with open(path, "r") as f:
+        return f.read()
 
-    # ── STATE FLAG ───────────────────────────────────────────────
-    # in_string tracks whether we are currently inside a quoted string.
-    # While True, structural characters like { and [ are ignored.
-    in_string = False
+def test_easy_correct():
+    json_text = read_file("tests/test_data/easy_correct.json")
+    valid, msg = validate(json_text)
+    assert valid, msg
 
-    for character in json_string:
-        col += 1
+def test_easy_broken():
+    json_text = read_file("tests/test_data/easy_broken.json")
+    valid, msg = validate(json_text)
+    assert valid, msg
 
-        if character == "\n":
-            line += 1
-            col = 0
-            continue
+def test_medium_correct():
+    json_text = read_file("tests/test_data/medium_correct.json")
+    valid, msg = validate(json_text)
+    assert valid, msg
 
-        # ── STRING MODE ──────────────────────────────────────────
-        # When inside a string, only escapes and closing quotes matter.
-        if in_string:
-            if character == "\\":
-                # Skip the next character (escaped)
-                continue
-            elif character == '"':
-                in_string = False
-            continue
-
-        # ── NORMAL MODE ──────────────────────────────────────────
-        # We are outside of any string.
-
-        if character == '"':
-            in_string = True
-            continue
-
-        # Opening brace or bracket
-        if character == "{" or character == "[":
-            stack.push((character, line, col))
-
-        # Closing brace or bracket
-        elif character == "}" or character == "]":
-            if stack.is_empty():
-                # Unexpected closing character
-                return False, f"ERROR Line {line}, Col {col}: unexpected closer"
-
-            open_char, open_line, open_col = stack.pop()
-
-            if (open_char == "{" and character != "}") or \
-                (open_char == "[" and character != "]"):
-                return (
-                    False,
-                    f"ERROR Line {line}, Col {col}: expected matching closer for "
-                    f"'{open_char}' opened at Line {open_line}, Col {open_col}"
-                )
-
-    # ── AFTER ALL CHARACTERS ─────────────────────────────────────
-
-    if in_string:
-        return False, "ERROR: unterminated string"
-
-    if not stack.is_empty():
-        open_char, open_line, open_col = stack.pop()
-        return False, f"ERROR: unclosed '{open_char}' at Line {open_line}, Col {open_col}"
-
-    return True, "VALID"
+def test_medium_broken():
+    json_text = read_file("tests/test_data/medium_broken.json")
+    valid, msg = validate(json_text)
+    assert valid, msg

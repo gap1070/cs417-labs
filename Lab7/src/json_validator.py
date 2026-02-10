@@ -1,81 +1,68 @@
-from stack import Stack 
-from datetime import datetime 
+from stack import Stack
 
 def validate(json_string):
     stack = Stack()
     line = 1
-    col = 0 
+    col = 0
     in_string = False
-    leave_next = False
+    i = 0
 
-    for char in json_string:
-        col += 1 
+    while i < len(json_string):
+        char = json_string[i]
+        col += 1
 
-        # how to handle the new line 
+        # Handle newline
         if char == "\n":
             line += 1
-            col = 0 
-            continue 
-
-        # string mode 
-        if in_string:
-            if leave_next:
-                leave_next = False
-                continue
-            
-            if char == "\\":
-                leave_next = True 
-                continue
-
-            if char == '"':
-                in_string = False 
-
-            # ignores everything else inside the strings 
+            col = 0
+            i += 1
             continue
 
-        # normal mode 
-        if char == '"':
-            in_string = True 
-            continue 
+        # Inside string
+        if in_string:
+            if char == "\\" and i + 1 < len(json_string):
+                # Skip escaped character
+                i += 2
+                col += 1
+                continue
+            elif char == '"':
+                in_string = False
+            i += 1
+            continue
 
-        # handles the opening characters 
-        if char == "{" or char == "[":
+        # Outside string
+        if char == '"':
+            in_string = True
+            i += 1
+            continue
+
+        # Opening braces/brackets
+        if char in "{[":
             stack.push((char, line, col))
 
-        # handles the closing characters 
-        elif char == "}" or char == "]":
+        # Closing braces/brackets
+        elif char in "}]":
             if stack.is_empty():
-                return (
-                    False,
-                    f"ERROR Line {line}, Col {col}: Unexpected '{char}'"
-                )
-            
-            open_char, open_line, open_col = stack.pop()
+                return False, f"ERROR Line {line}, Col {col}: Unexpected '{char}'"
 
+            open_char, open_line, open_col = stack.pop()
             expected = "}" if open_char == "{" else "]"
 
-            # checks for any messed up pairs 
             if char != expected:
                 return (
-                   False,
-                    f"Expected matching closer for '{open_char}' "
-                    f"(opened at Line {open_line}, Col {open_col}) "
-                    f"but found '{char}' at Line {line}, Col {col}"
+                    False,
+                    f"ERROR Line {line}, Col {col}: Expected matching closer for '{open_char}' "
+                    f"(opened at Line {open_line}, Col {open_col}) but found '{char}'"
                 )
-    
-    # checks the input 
+
+        i += 1
+
+    # End of file checks
     if in_string:
-        return (
-            False, 
-            f"ERROR Line {line}, Col {col}: Unterminated string"
-        )
-    
-    # after every character has been checked 
+        return False, f"ERROR Line {line}, Col {col}: Unterminated string"
+
     if not stack.is_empty():
         open_char, open_line, open_col = stack.pop()
-        return (
-            False,
-            f"Error: Unclosed '{open_char}' at Line {open_line}, Col {open_col}"
-        )
-    
-    return True, "Valid JSON"
+        return False, f"ERROR: Unclosed '{open_char}' at Line {open_line}, Col {open_col}"
+
+    return True, "VALID"
