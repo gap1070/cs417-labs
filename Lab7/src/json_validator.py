@@ -47,15 +47,15 @@ def validate(json_string):
             if stack.is_empty():
                 return (
                     False,
-                    f"Unexpected '{char}' at Line {line}, Col {col}"
+                    f"ERROR Line {line}, Col {col}: Unexpected '{char}'"
                 )
             
             open_char, open_line, open_col = stack.pop()
 
+            expected = "}" if open_char == "{" else "]"
+
             # checks for any messed up pairs 
-            if (open_char == "{" and char != "}") or (
-                open_char == "[" and char != "]"
-            ):
+            if char != expected:
                 return (
                    False,
                     f"Expected matching closer for '{open_char}' "
@@ -65,14 +65,17 @@ def validate(json_string):
     
     # checks the input 
     if in_string:
-        return False, "Unterminated string"
+        return (
+            False, 
+            f"ERROR Line {line}, Col {col}: Unterminated string"
+        )
     
     # after every character has been checked 
     if not stack.is_empty():
         open_char, open_line, open_col = stack.pop()
         return (
             False,
-            f"Unexpected '{open_char}' at Line {open_line}, Col {open_col}"
+            f"Error: Unclosed '{open_char}' at Line {open_line}, Col {open_col}"
         )
     
     return True, "Valid JSON"
