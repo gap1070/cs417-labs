@@ -5,6 +5,8 @@ def validate(json_string):
     stack = Stack()
     line = 1
     col = 0 
+    in_string = False
+    leave_next = False
 
     for char in json_string:
         col += 1 
@@ -13,6 +15,27 @@ def validate(json_string):
         if char == "\n":
             line += 1
             col = 0 
+            continue 
+
+        # string mode 
+        if in_string:
+            if leave_next:
+                leave_next = False
+                continue
+            
+            if char == "\\":
+                leave_next = True 
+                continue
+
+            if char == '"':
+                in_string = False 
+
+            # ignores everything else inside the strings 
+            continue
+
+        # normal mode 
+        if char == '"':
+            in_string = True 
             continue 
 
         # handles the opening characters 
@@ -35,11 +58,15 @@ def validate(json_string):
             ):
                 return (
                    False,
-                    f"Mismatched '{open_char}' opened at "
-                    f"Line {open_line}, Col {open_col} "
+                    f"Expected matching closer for '{open_char}' "
+                    f"(opened at Line {open_line}, Col {open_col}) "
                     f"but found '{char}' at Line {line}, Col {col}"
                 )
-            
+    
+    # checks the input 
+    if in_string:
+        return False, "Unterminated string"
+    
     # after every character has been checked 
     if not stack.is_empty():
         open_char, open_line, open_col = stack.pop()
