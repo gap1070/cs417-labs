@@ -1,3 +1,11 @@
+"""
+Tests for JSON Structure Validator — Lab 7.
+Do not modify this file.
+
+Run from the labs/Lab7 directory:
+    pytest -v
+"""
+
 import os
 import sys
 
