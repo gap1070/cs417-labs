@@ -24,6 +24,7 @@ class HashTable:
     # ── TODO 1: Hash Function ─────────────────────────────────────
 
     def _hash(self, key):
+        return hash(key) % self.size
         """
         Return a bucket index for the given key.
 
@@ -36,11 +37,20 @@ class HashTable:
         Returns:
             int: A bucket index between 0 and self.size - 1.
         """
-        pass  # TODO: implement this (1 line)
 
     # ── TODO 2: Put ───────────────────────────────────────────────
 
     def put(self, key, value):
+        index = self._hash(key)
+        bucket = self.table[index]
+
+        for pair in bucket:
+            if pair[0] == key:
+                pair[1] = value
+                return 
+            
+        bucket.append([key, value])
+        self.count += 1 
         """
         Insert or update a key-value pair.
 
@@ -55,11 +65,18 @@ class HashTable:
             key:   The key to insert.
             value: The value to associate with the key.
         """
-        pass  # TODO: implement this
 
     # ── TODO 3: Get ───────────────────────────────────────────────
 
     def get(self, key):
+        index = self._hash(key)
+        bucket = self.table[index]
+
+        for pair in bucket:
+            if pair[0] == key:
+                return pair[1]
+            
+        raise KeyError(key)
         """
         Look up a value by key.
 
@@ -77,11 +94,20 @@ class HashTable:
         Raises:
             KeyError: If the key is not found.
         """
-        pass  # TODO: implement this
 
     # ── TODO 4: Delete ────────────────────────────────────────────
 
     def delete(self, key):
+        index = self._hash(key)
+        bucket = self.table[index]
+
+        for i, pair in enumerate(bucket):
+            if pair[0] == key:
+                del bucket[i]
+                self.count -= 1 
+                return 
+            
+        raise KeyError(key)
         """
         Remove a key-value pair from the table.
 
@@ -97,7 +123,6 @@ class HashTable:
         Raises:
             KeyError: If the key is not found.
         """
-        pass  # TODO: implement this
 
     # ── Provided Methods (do not modify) ──────────────────────────
 
