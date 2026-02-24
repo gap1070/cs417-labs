@@ -43,7 +43,7 @@ class HashTableOpen:
         Returns:
             int: A slot index between 0 and self.size - 1.
         """
-        pass  # TODO: implement this (1 line)
+        return hash(key) % self.size 
 
     # ── TODO 2: Put ───────────────────────────────────────────────
 
@@ -67,7 +67,7 @@ class HashTableOpen:
             key:   The key to insert.
             value: The value to associate with the key.
         """
-        pass  # TODO: implement this
+        
 
     # ── TODO 3: Get ───────────────────────────────────────────────
 
