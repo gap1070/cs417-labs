@@ -16,34 +16,48 @@ class TestTombstones:
     """Tests that tombstones keep the hash table working correctly."""
 
     def test_probe_chain_survives_deletion(self):
-        """
-        Insert three keys that collide (use a small table, like size=3).
-        Delete the MIDDLE one.
-        Verify that you can still find the LAST one.
-
-        This is the core tombstone test — if delete uses None instead
-        of a tombstone, this test will fail because the probe chain breaks.
-        """
-        pass  # TODO: write this test
+        ht = HashTableOpen(size=3)
+        # adds everything 
+        ht.put("a", 1)
+        ht.put("b", 2)
+        ht.put("c", 3)
+        # deletes middle key 
+        ht.delete("b")
+        # retrieves key 3, and sees if last key is still able to reach 
+        assert ht.get("c") == 3 
+        assert "c" in ht 
 
     def test_tombstone_slot_reused_on_insert(self):
-        """
-        Insert a key, then delete it (creating a tombstone).
-        Insert a NEW key that would land on that same slot.
-        Verify the new key is stored and the count is correct.
-
-        This tests that put() treats tombstones as open slots
-        for new insertions.
-        """
-        pass  # TODO: write this test
+        ht = HashTableOpen(size=3)
+        # puts table together
+        ht.put("a", 100)
+        # deletes key
+        ht.delete("a")
+        # checks if anything 
+        assert len(ht) == 0 
+        # inserts new key 
+        ht.put("b", 200)
+        # checks if worked 
+        assert ht.get("b") == 200 
+        assert len(ht) == 1 
 
     def test_count_correct_through_delete_and_reinsert(self):
-        """
-        Start with a table, insert 3 keys (count should be 3).
-        Delete one (count should be 2).
-        Reinsert a key with the same name (count should be 3).
-        Delete two keys (count should be 1).
-
-        Verify len() is correct after every step.
-        """
-        pass  # TODO: write this test
+        ht = HashTableOpen(size=5)
+        # creates table
+        ht.put("a", 1)
+        ht.put("b", 2)
+        ht.put("c", 3)
+        # checks length
+        assert len(ht) == 3
+        # deletes second key 
+        ht.delete("b")
+        assert len(ht) == 2
+        # puts another key 
+        ht.put("b", 22)
+        assert len(ht) == 3 
+        assert ht.get("b") == 22 
+        # delete first and last key 
+        ht.delete("a")
+        ht.delete("c")
+        # checks final length 
+        assert len(ht) == 1 
