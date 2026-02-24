@@ -31,43 +31,28 @@ class HashTableOpen:
     # ── TODO 1: Hash Function ─────────────────────────────────────
 
     def _hash(self, key):
-        """
-        Return a slot index for the given key.
-
-        Use Python's built-in hash() function and modulo (%) to map
-        the key to a valid index in range [0, self.size).
-
-        Args:
-            key: The key to hash (any hashable type).
-
-        Returns:
-            int: A slot index between 0 and self.size - 1.
-        """
         return hash(key) % self.size 
 
     # ── TODO 2: Put ───────────────────────────────────────────────
 
     def put(self, key, value):
-        """
-        Insert or update a key-value pair using linear probing.
+        start = self._hash(key)
 
-        Algorithm:
-            1. Compute the starting index with _hash(key).
-            2. Probe forward through the table:
-               - If the slot is None or _TOMBSTONE → place (key, value) here.
-               - If the slot has a matching key → update the value.
-               - Otherwise → move to the next slot (wrap around with %).
-            3. Increment self.count only when adding a NEW key.
-            4. Raise Exception("Hash table is full") if no slot is found.
+        for step in range(self.size):
+            index = (start + step) % self.size
+            slot = self.table[index]
 
-        Hint: for step in range(self.size) lets you try every slot once.
-              index = (start + step) % self.size handles the wrap-around.
+            if slot is None:
+                self.table[index] = (key, value)
+                self.count += 1 
+                return
+            
+            if slot[0] == key:
+                self.table[index] = (key, value)
+                return
 
-        Args:
-            key:   The key to insert.
-            value: The value to associate with the key.
-        """
-        
+        raise Exception("Hash table is full")
+
 
     # ── TODO 3: Get ───────────────────────────────────────────────
 
@@ -95,7 +80,19 @@ class HashTableOpen:
         Raises:
             KeyError: If the key is not found.
         """
-        pass  # TODO: implement this
+        start = self._hash(key)
+
+        for step in range(self.size):
+            index = (start + step) % self.size
+            slot = self.table[index]
+
+            if slot is None:
+                break
+
+            if slot[0] == key:
+                return slot[1]
+            
+        raise KeyError(key)
 
     # ── TODO 4: Delete ────────────────────────────────────────────
 
