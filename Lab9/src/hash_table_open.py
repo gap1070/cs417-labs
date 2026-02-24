@@ -42,11 +42,13 @@ class HashTableOpen:
             index = (start + step) % self.size
             slot = self.table[index]
 
-            if slot is None:
+            # treats the tombstones just like other empty slots 
+            if slot is None or slot is _TOMBSTONE:
                 self.table[index] = (key, value)
                 self.count += 1 
                 return
             
+            # updates the existing key
             if slot[0] == key:
                 self.table[index] = (key, value)
                 return
@@ -57,37 +59,19 @@ class HashTableOpen:
     # ── TODO 3: Get ───────────────────────────────────────────────
 
     def get(self, key):
-        """
-        Look up a value by key, following the probe chain.
-
-        Algorithm:
-            1. Start at _hash(key).
-            2. Probe forward:
-               - Matching key → return the value.
-               - None → key not in table → raise KeyError.
-               - _TOMBSTONE → skip it, keep probing.
-               - Different key → keep probing.
-            3. Raise KeyError if you've checked every slot.
-
-        Important: Tombstones do NOT stop the search. Only None stops it.
-
-        Args:
-            key: The key to look up.
-
-        Returns:
-            The value associated with the key.
-
-        Raises:
-            KeyError: If the key is not found.
-        """
         start = self._hash(key)
 
         for step in range(self.size):
             index = (start + step) % self.size
             slot = self.table[index]
 
+            # a slot is None if it was never placed 
             if slot is None:
                 break
+
+            # skips the tombstones
+            if slot is _TOMBSTONE:
+                continue
 
             if slot[0] == key:
                 return slot[1]
@@ -116,7 +100,27 @@ class HashTableOpen:
         Raises:
             KeyError: If the key is not found.
         """
-        pass  # TODO: implement this
+        start = self._hash(key)
+
+        for step in range(self.size):
+            index = (start + step) % self.size
+            slot = self.table[index]
+
+            # if a slots none, the key doesn't exist
+            if slot is None:
+                break
+
+            # skips the tombstones
+            if slot is _TOMBSTONE:
+                continue
+
+            # finds the key and replaces with tombstone 
+            if slot[0] == key:
+                self.table[index] = _TOMBSTONE
+                self.count -= 1 
+                return 
+            
+        raise KeyError(key)
 
     # ── Provided Methods (do not modify) ──────────────────────────
 
