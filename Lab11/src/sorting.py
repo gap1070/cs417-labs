@@ -17,26 +17,14 @@ Run tests:
 
 
 def bubble_sort(a_list):
-    """
-    Sort a_list in ascending order using bubble sort.
+    n = len(a_list)
 
-    Makes multiple passes through the list, comparing adjacent items
-    and swapping any pair that is out of order. After each pass, the
-    next largest item has "bubbled" into its correct position at the end.
+    for i in range(n-1):
+        for j in range(n-1-i):
+            if a_list[j] > a_list[j + 1]:
+                a_list[j], a_list[j + 1] = a_list[j + 1], a_list[j]
 
-    Algorithm:
-        1. Make n - 1 passes (outer loop, where n = len(a_list))
-        2. On pass i, compare adjacent items from position 0
-           up to position n - 1 - i
-        3. If a_list[j] > a_list[j + 1], swap them
-
-    Args:
-        a_list: A list of comparable items.
-
-    Returns:
-        The same list, now sorted in ascending order.
-    """
-    pass  # TODO: implement this
+    return a_list
 
 
 # ── TODO 2: Short Bubble Sort ───────────────────────────────────
