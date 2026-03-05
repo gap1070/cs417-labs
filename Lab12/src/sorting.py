@@ -25,34 +25,6 @@ Run tests:
 
 
 def _gap_insertion_sort(a_list, start, gap):
-    """
-    Perform insertion sort on a sublist defined by a starting
-    position and gap.
-
-    This sorts the elements at positions start, start+gap,
-    start+2*gap, ... using insertion sort logic, but comparing
-    and shifting by 'gap' positions instead of 1.
-
-    Algorithm:
-        1. Loop from start + gap to len(a_list), stepping by gap
-        2. For each position i:
-           - Save a_list[i] as current_value
-           - Set position = i
-           - Walk backward by gap: while position >= gap AND
-             a_list[position - gap] > current_value:
-               shift: a_list[position] = a_list[position - gap]
-               position = position - gap
-           - Place current_value at position
-
-    This is your insertion sort from Lab 11, but every "1"
-    becomes "gap". The while condition checks position >= gap
-    (not position >= 0) because we step back by gap, not by 1.
-
-    Args:
-        a_list: The full list being sorted.
-        start: The starting index of this sublist.
-        gap: The distance between sublist elements.
-    """
     for i in range(start + gap, len(a_list), gap): 
         current_value = a_list[i]
         position = i
@@ -126,7 +98,28 @@ def merge_sort(a_list):
     # Initialize: i = 0, j = 0, k = 0
     # Then write the three while loops described above.
 
-    pass  # TODO: replace this with the merge logic
+    i = 0 
+    j = 0 
+    k = 0 
+
+    while i < len(left) and j < len(right):
+        if left[i] <= right[j]:
+            a_list[k] = left[i]
+            i += 1
+        else:
+            a_list[k] = right[j]
+            j += 1 
+        k += 1 
+
+    while i < len(left):
+        a_list[k] = left[i]
+        i += 1 
+        k += 1 
+
+    while j < len(right):
+        a_list[k] = right[j]
+        j += 1 
+        k += 1 
 
     return a_list
 
