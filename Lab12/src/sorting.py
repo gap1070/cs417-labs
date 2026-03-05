@@ -55,34 +55,6 @@ def shell_sort(a_list):
 
 
 def merge_sort(a_list):
-    """
-    Sort a_list in ascending order using merge sort.
-
-    The recursive structure is provided. Your job is to fill in
-    the MERGE STEP where indicated — combining two sorted halves
-    (left and right) back into a_list.
-
-    The merge uses three index variables, all starting at 0:
-      - i walks through the left half
-      - j walks through the right half
-      - k fills positions in a_list
-
-    The merge has THREE loops:
-      1. Main merge: while i < len(left) AND j < len(right)
-         Compare left[i] and right[j]. Take the SMALLER one
-         (use <= for stability) and put it at a_list[k].
-         Advance whichever index you took from, and advance k.
-      2. Left remainder: while i < len(left)
-         Copy left[i] to a_list[k], advance both.
-      3. Right remainder: while j < len(right)
-         Copy right[j] to a_list[k], advance both.
-
-    Args:
-        a_list: A list of comparable items.
-
-    Returns:
-        The same list, now sorted in ascending order.
-    """
     if len(a_list) <= 1:
         return a_list
 
@@ -128,34 +100,28 @@ def merge_sort(a_list):
 
 
 def _partition(a_list, first, last):
-    """
-    Partition a_list[first..last] around a pivot value.
+    pivot_value = a_list[first]
 
-    Uses the first item as the pivot. Two markers scan inward:
+    left_mark = first + 1
+    right_mark = last
+    done = False
 
-    Algorithm:
-        1. pivot_value = a_list[first]
-        2. left_mark = first + 1, right_mark = last
-        3. Use a boolean 'done' flag, loop while not done:
-           a. Advance left_mark while left_mark <= right_mark
-              AND a_list[left_mark] <= pivot_value
-           b. Advance right_mark while left_mark <= right_mark
-              AND a_list[right_mark] >= pivot_value
-           c. If right_mark < left_mark: set done = True
-           d. Otherwise: swap a_list[left_mark] and a_list[right_mark]
-        4. Swap a_list[first] with a_list[right_mark]
-           (puts pivot in its final position)
-        5. Return right_mark
+    while not done:
 
-    Args:
-        a_list: The list being sorted.
-        first: Start index of the region to partition.
-        last: End index of the region to partition.
+        while left_mark <= right_mark and a_list[left_mark] <= pivot_value:
+            left_mark += 1 
 
-    Returns:
-        The index where the pivot ended up (the split point).
-    """
-    pass  # TODO: implement this
+        while left_mark <= right_mark and a_list[right_mark] >= pivot_value:
+            right_mark -= 1 
+
+        if right_mark < left_mark:
+            done = True
+        else:
+             a_list[left_mark], a_list[right_mark] = a_list[right_mark], a_list[left_mark]
+
+    a_list[first], a_list[right_mark] = a_list[right_mark], a_list[first]
+
+    return right_mark
 
 
 def _quick_sort_helper(a_list, first, last):
