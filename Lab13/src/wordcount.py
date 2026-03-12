@@ -78,19 +78,6 @@ def analyze(filepath, ignore_case=False, top=None, min_length=1,
         result += f"  {word}: {c}\n"
 
     return result.strip()
-    
-    # TODO: Filter out words shorter than min_length
-    # TODO: Count total words
-    # TODO: If top is None, return "<filename>: <count> words"
-    # TODO: If top is set, find the most frequent words:
-    #   - Use Counter(words).most_common() for frequency data
-    #   - If sort_by == "alpha", sort alphabetically instead
-    #   - If reverse, flip the order
-    #   - Take the first 'top' entries
-    #   - Return multi-line string:
-    #       "<filename>: <count> words\n\nTop <N> words:\n  <word>: <count>\n  ..."
-    pass
-
 
 def main():
     parser = build_parser()
