@@ -4,49 +4,56 @@ from collections import Counter
 
 
 def build_parser():
-    """Create and return the argument parser.
+    parser = argparse.ArgumentParser(description="Word counting tool")
+    
+    parser.add_argument(
+        "filename",
+        help="text file to analyze"
+    )
 
-    Arguments to define:
-        filename    - positional, the text file to analyze
-        --ignore-case / -i  - store_true, lowercase all words
-        --top / -t          - int, show top N most frequent words (default: None)
-        --min-length / -m   - int, only count words with at least this many chars (default: 1)
-        --sort-by / -s      - choices ["freq", "alpha"], how to sort top words (default: "freq")
-        --reverse / -r      - store_true, reverse the sort order
+    parser.add_argument(
+        "--ignore-case", "-i",
+        action="store_true",
+        help="lowercase all words before counting"
+    )
+    
+    parser.add_argument(
+        "--top", "-t", 
+        type=int, 
+        default=None,
+        help="show top N most frequent words"
+    )
 
-    Returns:
-        argparse.ArgumentParser
-    """
-    # TODO: Create an ArgumentParser with a description
-    # TODO: Add the positional 'filename' argument
-    # TODO: Add --ignore-case / -i (action="store_true")
-    # TODO: Add --top / -t (type=int, default=None)
+    return parser
+    
     # TODO: Add --min-length / -m (type=int, default=1)
     # TODO: Add --sort-by / -s (choices=["freq", "alpha"], default="freq")
     # TODO: Add --reverse / -r (action="store_true")
-    pass
 
 
 def analyze(filepath, ignore_case=False, top=None, min_length=1,
             sort_by="freq", reverse=False):
-    """Analyze a text file and return a formatted result string.
+    with open(filepath, "r") as f:
+        words = f.read().split()
 
-    Args:
-        filepath: path to the text file
-        ignore_case: if True, lowercase all words before counting
-        top: if set, show the N most frequent words with counts
-        min_length: only count words with at least this many characters
-        sort_by: "freq" (by count) or "alpha" (alphabetical) when showing top words
-        reverse: if True, reverse the sort order
+    if ignore_case:
+        words = [w.lower() for w in words]
 
-    Returns:
-        str: formatted result
+    count = len(words)
 
-    Raises:
-        FileNotFoundError: if the file doesn't exist
-    """
-    # TODO: Read the file and split into words on whitespace
-    # TODO: If ignore_case, lowercase all words
+    if top is None:
+        return f"{filepath}: {count} words"
+    
+    counter = Counter(words)
+    common = counter.most_common(top)
+
+    result = f"{filepath}: {count} words\n\nTop {top} words:\n"
+
+    for word, c in common:
+        result += f"  {word}: {c}\n"
+
+    return result.strip()
+    
     # TODO: Filter out words shorter than min_length
     # TODO: Count total words
     # TODO: If top is None, return "<filename>: <count> words"
@@ -61,13 +68,16 @@ def analyze(filepath, ignore_case=False, top=None, min_length=1,
 
 
 def main():
-    """Build parser, parse args, analyze, print result."""
-    # TODO: Build the parser
-    # TODO: Parse args
-    # TODO: Call analyze with the parsed arguments
-    # TODO: Print the result
-    pass
+    parser = build_parser()
+    args = parser.parse_args()
 
+    result = analyze(
+        args.filename,
+        ignore_case=args.ignore_case,
+        top=args.top
+    )
+
+    print(result)
 
 if __name__ == "__main__":
     main()
