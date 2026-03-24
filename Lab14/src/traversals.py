@@ -30,19 +30,21 @@ def build_sample_tree():
 # ── Task 1: Explore the BST ─────────────────────────────────────────
 
 def explore():
-    """Explore the provided BST module.
+    tree = build_sample_tree()
 
-    TODO:
-    - Build the sample tree using build_sample_tree()
-    - Print the tree using its display() method
-    - Search for the values 12, 20, and 25
-      - For each, print whether it was found
-        e.g., "Search 12: Found" or "Search 20: Not found"
-    - Print the total number of nodes using the size() method
-      e.g., "Tree has 9 nodes"
-    """
-    pass  # TODO: implement this
+    # prints tree
+    tree.display()
 
+    # search for specific values 
+    for value in [12, 20, 25]:
+        result = tree.search(value)
+        if result:
+            print(f"Search {value}: Found")
+        else:
+            print(f"Search {value}: Not Found")
+
+    # prints the number total of nodes 
+    print(f"Tree has {tree.size()} nodes")
 
 # ── Task 2: Inorder Traversal (Left → Self → Right) ─────────────────
 
