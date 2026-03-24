@@ -6,6 +6,7 @@ The BST module is provided — don't modify bst.py.
 """
 
 from bst import BST
+from collections import deque
 
 
 def build_sample_tree():
@@ -73,19 +74,22 @@ def postorder(node):
 # ── Task 5: Level-Order Traversal (BFS) ─────────────────────────────
 
 def levelorder(node):
-    """Return a list of values from a level-order (BFS) traversal.
+    if node is None:
+        return []
+    
+    result = []
+    queue = deque([node])
 
-    Visit nodes level by level, from top to bottom, left to right.
-    Uses a queue — not recursion.
-    Returns an empty list if node is None.
+    while queue:
+        current = queue.popleft()
+        result.append(current.value)
 
-    Hint: collections.deque works great as a queue.
-      - append() adds to the back
-      - popleft() removes from the front
+        if current.left:
+            queue.append(current.left)
+        if current.right:
+            queue.append(current.right)
 
-    TODO: implement this
-    """
-    pass  # TODO: implement this
+    return result 
 
 
 # ── Main ─────────────────────────────────────────────────────────────
