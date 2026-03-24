@@ -49,14 +49,9 @@ def explore():
 # ── Task 2: Inorder Traversal (Left → Self → Right) ─────────────────
 
 def inorder(node):
-    """Return a list of values from an inorder traversal.
-
-    Visit the left subtree, then the current node, then the right subtree.
-    Returns an empty list if node is None.
-
-    TODO: implement this
-    """
-    pass  # TODO: implement this
+    if node is None:
+        return []
+    return inorder(node.left) + [node.value] + inorder(node.right)
 
 
 # ── Task 3: Preorder Traversal (Self → Left → Right) ────────────────
