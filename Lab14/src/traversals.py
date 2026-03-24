@@ -57,14 +57,9 @@ def inorder(node):
 # ── Task 3: Preorder Traversal (Self → Left → Right) ────────────────
 
 def preorder(node):
-    """Return a list of values from a preorder traversal.
-
-    Visit the current node, then the left subtree, then the right subtree.
-    Returns an empty list if node is None.
-
-    TODO: implement this
-    """
-    pass  # TODO: implement this
+    if node is None:
+        return []
+    return [node.value] + preorder(node.left) + preorder(node.right)
 
 
 # ── Task 4: Postorder Traversal (Left → Right → Self) ───────────────
