@@ -65,14 +65,9 @@ def preorder(node):
 # ── Task 4: Postorder Traversal (Left → Right → Self) ───────────────
 
 def postorder(node):
-    """Return a list of values from a postorder traversal.
-
-    Visit the left subtree, then the right subtree, then the current node.
-    Returns an empty list if node is None.
-
-    TODO: implement this
-    """
-    pass  # TODO: implement this
+    if node is None:
+        return []
+    return postorder(node.left) + postorder(node.right) + [node.value]
 
 
 # ── Task 5: Level-Order Traversal (BFS) ─────────────────────────────
