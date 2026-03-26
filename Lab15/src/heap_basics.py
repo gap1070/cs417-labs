@@ -41,15 +41,6 @@ def top_k_smallest(values, k):
 
 
 def sort_by_priority(tasks):
-    """Sort tasks by priority, maintaining FIFO order for equal priorities.
-
-    Args:
-        tasks: A list of (priority, description) tuples.
-
-    Returns:
-        A list of description strings in priority order.
-        Same-priority tasks appear in their original order.
-    """
     h = []
     result = []
 
