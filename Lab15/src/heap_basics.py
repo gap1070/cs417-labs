@@ -50,5 +50,15 @@ def sort_by_priority(tasks):
         A list of description strings in priority order.
         Same-priority tasks appear in their original order.
     """
-    # TODO: Use a heap with a sequence counter as tiebreaker
-    pass
+    h = []
+    result = []
+
+    # counter for FIFO
+    for i, (priority, description) in enumerate(tasks):
+        heapq.heappush(h, (priority, i, description))
+
+    while h:
+        _, _, description = heapq.heappop(h)
+        result.append(description)
+
+    return result 
