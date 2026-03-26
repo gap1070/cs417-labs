@@ -11,43 +11,30 @@ import heapq
 
 
 def push_and_pop(values):
-    """Push all values onto a heap, then pop them all off.
+    h = []
 
-    Args:
-        values: A list of numbers.
+    for v in values:
+        heapq.heappush(h, v)
 
-    Returns:
-        A list of the same numbers in ascending order.
-    """
-    # TODO: Create a heap, push each value, pop them all off
-    pass
+    result = []
+    while h:
+        result.append(heapq.heappop(h))
+
+    return result 
 
 
 def heapify_and_peek(values):
-    """Turn a list into a heap and return the smallest value.
+    if not values:
+        return None
+    
+    h = list(values)
+    heapq.heapify(h)
 
-    Args:
-        values: A list of numbers.
-
-    Returns:
-        The smallest value (without removing it from the heap).
-    """
-    # TODO: Use heapq.heapify(), then peek with h[0]
-    pass
+    return h[0]
 
 
 def top_k_smallest(values, k):
-    """Return the k smallest values in ascending order.
-
-    Args:
-        values: A list of numbers.
-        k: How many smallest values to return.
-
-    Returns:
-        A list of the k smallest values, sorted ascending.
-    """
-    # TODO: Use heapq to find the k smallest values
-    pass
+    return heapq.nsmallest(k, values)
 
 
 # ── Task 2: Tuple Priorities ────────────────────────────────────────
