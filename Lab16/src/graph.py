@@ -54,20 +54,6 @@ class Graph:
 # ── Task 1: Build the Graph ───────────────────────────────────────
 
 def build_lab_graph():
-    """Build and return the lab graph.
-
-    The graph looks like this:
-
-        A
-       / \\
-      B   C
-      |   |
-      D   E
-       \\ /
-        F
-
-    Edges: A-B, A-C, B-D, C-E, D-F, E-F
-    """
     g = Graph()
 
     # add the nodes
@@ -81,32 +67,29 @@ def build_lab_graph():
     g.add_edge("C", "E")
     g.add_edge("D", "F")
     g.add_edge("E", "F")
-    
+
     return g
 
 
 # ── Task 2: Breadth-First Search ──────────────────────────────────
 
 def bfs(graph, start):
-    """Traverse the graph in breadth-first order starting from `start`.
-
-    Returns a list of node labels in the order they were visited.
-    """
     visited = set()
     order = []
     frontier = deque()
 
-    # TODO: Add `start` to the frontier and mark it as visited
+    # initialize
+    frontier.append(start)
+    visited.add(start)
 
     while frontier:
-        # TODO: Dequeue the next node from the front of the queue
-
-        # TODO: Add the current node to the traversal order
+        current = frontier.popleft()
+        order.append(current)
 
         for neighbor in graph.get_neighbors(current):
-            pass
-            # TODO: If this neighbor hasn't been visited,
-            #        mark it as visited and add it to the frontier
+            if neighbor not in visited:
+                visited.add(neighbor)
+                frontier.append(neighbor)
 
     return order
 
