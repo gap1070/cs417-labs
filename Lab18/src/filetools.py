@@ -21,24 +21,10 @@ def read_json(filepath: str):
 
 
 def write_csv(filepath: str, data: list[dict], fieldnames: list[str]) -> None:
-    """Write a list of dictionaries to a CSV file.
-
-    TODO (Task 3):
-    - Open the file in write mode with encoding="utf-8" and newline=""
-    - Create a csv.DictWriter with the given fieldnames
-    - Write the header row first
-    - Write all data rows
-
-    Args:
-        filepath: Path for the output CSV file.
-        data: List of dicts to write (one dict per row).
-        fieldnames: Column names, in order.
-
-    Example:
-        >>> write_csv("output.csv", [{"name": "Alice", "grade": 92}], ["name", "grade"])
-    """
-    # TODO: Implement this function
-    pass
+    with open(filepath, "w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerows(data)
 
 
 def write_json(filepath: str, data) -> None:
