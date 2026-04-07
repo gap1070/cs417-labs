@@ -10,28 +10,9 @@ from pathlib import Path
 
 
 def read_csv(filepath: str) -> list[dict]:
-    """Read a CSV file and return a list of dictionaries.
-
-    Each dictionary represents one row, with column headers as keys.
-
-    TODO (Task 1):
-    - Open the file with encoding="utf-8"
-    - Use csv.DictReader to parse the rows
-    - Return a list of all row dictionaries
-
-    Args:
-        filepath: Path to the CSV file.
-
-    Returns:
-        List of dicts, one per row.
-
-    Example:
-        >>> rows = read_csv("data/roster.csv")
-        >>> rows[0]["name"]
-        'Alice'
-    """
-    # TODO: Implement this function
-    pass
+    with open(filepath, encoding="utf-8") as f:
+        reader = csv.DictReader(f)
+        return list(reader)
 
 
 def read_json(filepath: str):
