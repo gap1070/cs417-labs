@@ -16,26 +16,8 @@ def read_csv(filepath: str) -> list[dict]:
 
 
 def read_json(filepath: str):
-    """Read a JSON file and return the parsed Python object.
-
-    TODO (Task 2):
-    - Open the file with encoding="utf-8"
-    - Use json.load() to parse it
-    - Return the result
-
-    Args:
-        filepath: Path to the JSON file.
-
-    Returns:
-        The parsed JSON data (usually a list or dict).
-
-    Example:
-        >>> data = read_json("data/roster.json")
-        >>> data[0]["grade"]
-        92
-    """
-    # TODO: Implement this function
-    pass
+    with open(filepath, encoding="utf-8") as f:
+        return json.load(f)
 
 
 def write_csv(filepath: str, data: list[dict], fieldnames: list[str]) -> None:
