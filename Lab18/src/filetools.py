@@ -28,22 +28,8 @@ def write_csv(filepath: str, data: list[dict], fieldnames: list[str]) -> None:
 
 
 def write_json(filepath: str, data) -> None:
-    """Write a Python object to a JSON file with readable formatting.
-
-    TODO (Task 4):
-    - Open the file in write mode with encoding="utf-8"
-    - Use json.dump() with indent=2 for readability
-    - Set ensure_ascii=False so accented characters render correctly
-
-    Args:
-        filepath: Path for the output JSON file.
-        data: The Python object to serialize.
-
-    Example:
-        >>> write_json("output.json", [{"name": "José", "grade": 91}])
-    """
-    # TODO: Implement this function
-    pass
+    with open(filepath, "w", encoding="utf-8") as f:
+        json.dump(data, f, indent=2, ensure_ascii=False)
 
 
 def csv_to_json(
