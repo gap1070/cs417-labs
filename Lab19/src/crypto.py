@@ -58,27 +58,17 @@ class CoinCache:
     """
 
     def __init__(self, ttl_seconds: int = 60):
-        """
-        Initialize the cache.
+        self.ttl_seconds = ttl_seconds
+        self._store = {}
+        self.hits = 0
+        self.misses = 0
 
-        Args:
-            ttl_seconds: How many seconds a cached entry stays fresh.
-        """
-        # TODO: Task 3
-        # Set up: ttl_seconds, _store (empty dict), hits (0), misses (0)
-        pass
 
     def put(self, coin_id: str, price: float):
-        """
-        Store a price in the cache with a timestamp.
-
-        Args:
-            coin_id: The coin identifier
-            price: The USD price to cache
-        """
-        # TODO: Task 3
-        # Store {"price": price, "timestamp": time.time()} in _store
-        pass
+        self._store[coin_id] = {
+            "price": price,
+            "timestamp": time.time()
+        }
 
     def get(self, coin_id: str):
         """
@@ -90,9 +80,21 @@ class CoinCache:
         Returns:
             The cached price as a float, or None if not found / expired.
         """
-        # TODO: Task 3 — basic version (just check if key exists)
-        # TODO: Task 4 — add TTL check (is the entry still fresh?)
-        pass
+        if coin_id not in self._store:
+            self.misses += 1
+            return None
+        
+        entry = self._store[coin_id]
+        current_time = time.time()
+
+        # TTL expiration
+        if current_time - entry["timestamp"] >= self.ttl_seconds:
+            self.misses += 1
+            return None
+        
+        self.hits += 1
+        return entry["price"]
+
 
 
 def get_price_cached(coin_id: str, api_key: str, cache: CoinCache) -> float:
