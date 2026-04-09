@@ -30,26 +30,23 @@ def get_price(coin_id: str, api_key: str) -> float:
 
 
 def get_prices_batch(coin_ids: list, api_key: str) -> dict:
-    """
-    Fetch USD prices for multiple coins in a single API call.
+    ids_string = ",".join(coin_ids)
 
-    Args:
-        coin_ids: List of CoinGecko coin identifiers
-        api_key: CoinGecko Demo API key
+    response = requests.get(
+        f"{BASE_URL}/simple/price", 
+        params={
+            "ids": ids_string, 
+            "vs_currencies": "usd",
+            "x_cg_demo_api_key": api_key
+        }
+    )
 
-    Returns:
-        Dictionary mapping coin_id to USD price.
-        Example: {"bitcoin": 65432.10, "ethereum": 3456.78}
+    if response.status_code != 200:
+        raise RuntimeError(response.status_code)
+    
+    data = response.json()
 
-    Raises:
-        RuntimeError: If the API response status code is not 200.
-    """
-    # TODO: Task 2
-    # 1. Join coin_ids into a comma-separated string
-    # 2. Make ONE GET request with the joined string as "ids"
-    # 3. Check status code
-    # 4. Parse JSON and flatten into {coin_id: price} dict
-    pass
+    return {coin: float(data[coin]["usd"]) for coin in coin_ids}
 
 
 class CoinCache:
