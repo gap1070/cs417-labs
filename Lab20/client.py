@@ -9,12 +9,6 @@ import time
 
 
 def submit(student: str, lab: int, base_url: str = "http://localhost:8000") -> dict:
-    """Task 1: Submit a grading request and return the result.
-
-    POST to {base_url}/grade with {"student": student, "lab": lab}.
-    Raise RuntimeError if the status code is not 200.
-    Return the response as a dictionary.
-    """
     response = requests.post(
         f"{base_url}/grade", 
         json={"studen": student, "lab": lab}
@@ -33,17 +27,22 @@ def submit_with_retry(
     timeout: float = 2,
     max_retries: int = 3,
 ) -> dict:
-    """Task 2: Submit with timeout and retry logic.
+    for _ in range(max_retries):
+        try:
+            response = requests.post(
+                f"{base_url}/grade",
+                json={"student": student, "lab": lab, "slow": True}
+            )
 
-    POST to /grade with {"student": student, "lab": lab, "slow": True}.
-    Use the timeout parameter in requests.post().
-    On requests.exceptions.Timeout, retry up to max_retries times.
-    Raise RuntimeError("all retries failed") if every attempt times out.
-    Return the response dictionary on success.
-    """
-    # TODO: Implement
-    pass
+            if response.status_code != 200:
+                raise RuntimeError("request failed")
+            
+            return response.json()
+        
+        except requests.exceptions.Timeout:
+            continue
 
+    raise RuntimeError("all retries failed")
 
 def submit_idempotent(
     student: str,
