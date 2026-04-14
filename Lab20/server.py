@@ -20,12 +20,19 @@ def grade_ednpoint(data: dict):
     student = data["student"]
     lab = data["lab"]
     slow = data.get("slow", False)
+    submission_id = data.get("submission_id")
 
+    if submission_id and submission_id in completed:
+        return completed[submission_id]
+    
     score = grade(student, lab, slow=slow)
 
     result = {"student": student, "lab": lab, "score": score}
 
     grading_log.append(result)
+
+    if submission_id:
+        completed[submission_id] = result
 
     return result 
 
@@ -45,11 +52,10 @@ def reset_log():
 # ---------------------------------------------------------------------------
 # Task 3: Idempotency Makes Retries Safe
 # ---------------------------------------------------------------------------
-# Add a completed dict that maps submission IDs to results.
-# Update POST /grade to check for an optional "submission_id" field —
-# if the ID is already in completed, return the cached result without
-# grading again or logging.
-# Add POST /reset-completed endpoint.
+@app.post("/reset-completed")
+def reset_completed():
+    completed.clear()
+    return {"status": "cleared"}
 
 
 # ---------------------------------------------------------------------------

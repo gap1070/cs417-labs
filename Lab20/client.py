@@ -31,7 +31,10 @@ def submit_with_retry(
         try:
             response = requests.post(
                 f"{base_url}/grade",
-                json={"student": student, "lab": lab, "slow": True}
+                json={
+                    "student": student, 
+                    "lab": lab, 
+                    "slow": True}
             )
 
             if response.status_code != 200:
@@ -51,13 +54,31 @@ def submit_idempotent(
     timeout: float = 2,
     max_retries: int = 3,
 ) -> dict:
-    """Task 3: Submit with an idempotency key.
+    submission_id = f"{student}-lab{lab}"
 
-    Same as submit_with_retry, but include a stable submission_id
-    in the request body: f"{student}-lab{lab}"
-    """
-    # TODO: Implement
-    pass
+    for _ in range(max_retries):
+        try:
+            response = requests.post(
+                f"{base_url}/grade",
+                json={
+                    "student": student, 
+                    "lab": lab, 
+                    "slow": True, 
+                    "submission_id": submission_id
+                },
+                timeout=timeout
+            )
+
+            if response.status_code != 200:
+                raise RuntimeError("request failed")
+            
+            return response.json()
+        
+        except requests.exceptions.Timeout:
+            continue
+
+    raise RuntimeError("all retries failed")
+    
 
 
 def submit_async(
