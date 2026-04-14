@@ -88,6 +88,29 @@ def submit_async(
     poll_interval: float = 0.5,
     max_polls: int = 20,
 ) -> dict:
+    submission_id = f"{student}-lab{lab}"
+
+    response = requests.post(
+        f"{base_url}/grade-async",
+        json={"student": student, "lab": lab, "submission_id": submission_id}
+    )
+
+    if response.status_code != 202:
+        raise RuntimeError("failed to start async job")
+    
+    job_id = response.json()["job_id"]
+
+    for _ in range(max_polls):
+        r = requests.get(f"{base_url}/grade-jobs/{job_id}")
+        data = r.json()
+
+        if data["status"] == "complete":
+            return data["result"]
+        
+        time.sleep(poll_interval)
+
+    raise RuntimeError("polling timed out")
+
     """Task 4: Async submission with polling.
 
     POST to /grade-async with student, lab, and a stable submission_id.
