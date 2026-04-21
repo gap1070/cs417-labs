@@ -1,3 +1,5 @@
+from typing import TypedDict
+
 # Section 1 
 def greet(name: str) -> str:
     return f"Hello, {name}!"
@@ -37,3 +39,12 @@ else:
 
 def format_id(value: int | str) -> str:
     return f"id-{value}"
+
+# Section 4 
+class StudentRow(TypedDict):
+    name: str
+    email: str
+    grade: str
+
+def read_roster(path: str) -> list[StudentRow]:
+    return [{"name": "Alice", "email": "alice@uni.edu", "grade": "92"}]
