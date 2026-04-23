@@ -1,3 +1,5 @@
+Part 1:
+
 Solution A
 What solution A does is it first check if k <= 0, which if it is then it returns an empty list. It then will use a Counter to count how many each of the items appear in the list that was inputted. Then the system uses counts.item to get the original order. The code builds a list of touples (count, -index, item) where this index is representing the first time these item appearred. Then the code uses heapq.nlargest(k, endexed) to get the very top k item based on the count. FInally, the codes converts the final result back into the (item, count) format, and it returns to the user. 
 Prediction 1
@@ -18,3 +20,17 @@ Prediction 1
 This solution will be the first out of the 3 to break when the size of the input grows. It uses the items.count(item) inside of a loop over the unique items which leads to this solution having a time complexity of O(n^2) in the worst cases. This means that when there is large amount of inputs, this program can become very, very slow, especially when alot of the items are unique. 
 Prediction 2 
 I would say this is the least trust worthy code out of all the solutions. Yes this code is eady to read, that fact hids the fact that it had a big perforance issue. Count() being inside of a loop, is a big performance issue, and in a real system would cause a huge slowdown. 
+
+Part 2:
+
+1st Place: Solution A
+I would have to give first place to solution A. I would have to say solution A because this solution avoid so much unnecessary work by using the heapq.nlargest, when it is able to only select the top k element instead of having to sort all the items like the other solution. The costruction of the (count, -i, item) allows the code to make very efficient comparisons. This solutions time complexity is pretty good too, it is able to scale pretty well even when the k is small compared to the amount of unique items. Also this solution uses standard library tools, which improves the readablility of the code alot. Although the tuple structure of this solution might take a little bit to understand, it makes the code so much better, and so much more efficient making it the best solution of the 3. 
+
+2nd Place: Solution B
+Solution B should be second place because it is a very clear, and easy to understand code, but it is slightly less efficient than solution A. This code sorts through all the unique items, even though only the top k is what is needed. The time complexity of this solution is O(m log m) which is worse than solution A for the bigger inputs. But the good thing about this solution is that it is very straight forward, and the structure of the code makes it pretty easy to debug too. For smaller databases, or just smaller inputs in general I would say this solution is the best one. 
+
+3rd Place: Solution C
+Solution C is the worst solution out of all 3 of the solutions due to its bad time complexity. The loop in the code that calls the items.count(item) for every single unique item is what is making this code so innefficient. This code ends up having a O(n^2) time complexity in the worst cases. While the code is easy to read, and it is pretty simple, the performance of it is the problem with it. And the problem with it isn't easy to find either which is a big problem if you don't understand the issue. This could be very dangerous in real world systems, or if a large amount of inputs were inputted into the system. 
+
+Part 3:
+
