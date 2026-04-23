@@ -34,3 +34,37 @@ Solution C is the worst solution out of all 3 of the solutions due to its bad ti
 
 Part 3:
 
+=== Regime 1 — small fixed vocabulary (50 distinct items) ===
+         n |   unique |     A (heap) |     B (sort) |     C (loop)
+------------------------------------------------------------------------
+       100 |       50 |       0.11ms |       0.04ms |       0.13ms
+     1,000 |       50 |       0.15ms |       0.12ms |       1.34ms
+    10,000 |       50 |       1.09ms |       0.84ms |      10.36ms
+   100,000 |       50 |       6.56ms |       5.14ms |      75.60ms
+
+=== Regime 2 — vocabulary scales with n (unique ≈ n/2) ===
+         n |   unique |     A (heap) |     B (sort) |     C (loop)
+------------------------------------------------------------------------
+       100 |       50 |       0.07ms |       0.03ms |       0.07ms
+     1,000 |      500 |       0.26ms |       0.19ms |       7.58ms
+    10,000 |    5,000 |       2.11ms |       4.59ms |     736.99ms
+    50,000 |   25,000 |      29.84ms |      37.75ms |   16393.07ms
+
+How to read the tables:
+  - Per-row: 10x more input. If a column's time grows ~10x, that's linear.
+    If it grows ~100x, that's roughly quadratic.
+  - Compare across regimes: which solutions are sensitive to unique-count?
+    Which are insensitive? Which workload would you choose each for?
+
+src/solution_c.py:29: error: Incompatible return value type (got "list[tuple[str, int]]", expected "list[int]")  [return-value]
+Found 1 error in 1 file (checked 3 source files)
+
+Did benchmark confirm rankings?
+Yes, the benchmark strongly confirmed what I was saying in part 2. IN both of the tables, solution a and solution b performed very good, and solution c was stuck not growing as fast as the input size got bigger, and bigger. In the second table especially, you can see solution C runtime became a huge number. Confirming using the items.count(item) leads to nothing efficient. Solution A was constently perfoming better than all the other solutions, and perfomed the best when the scales were largers, while solution B started to get a little slower when the amount of unique inputs grew. 
+
+Which variant did mypy catch?
+Mypy flagged solution C, with the error code that I pasted above this section. This error occured because in the code it says that it should return a list[int] but in really should return a list of tuples like (str, int). This is an example of type hints getting in the way, and messing up the code. While yes the code still runs fine, this confusion in the code could cause some mismatch, or confusion while trying to debug the code. 
+
+Was regime 1 different from regime 2?
+Yes there is a difference between these two. Regime 1 the number of unique items is fixed at 50, and because of that all three of the solutions are able to work pretty well. This is because sorting not that many unique items isn't that bad, but ones that number becomes bigger it becomes harder. In regie 2 the number of unique items does become bigger. This is where you can see the differences between the codes. Solution C becomes alot slower because of all the unique ites that is has to scan through now. Solution B also becomes alot slower with all the unique items it has to sort through now. And solution A works pretty good because it uses heap, and only had to process the top k element. Because of these tables, we are able to see that solution A would be best suited for workloads that have alot of unique items, and solution B is better for when the number of unique items isn't that big, and solution C is alot like solution B and is not suitable for big workloads, but doesn't do too bad with smaller ones. 
+
