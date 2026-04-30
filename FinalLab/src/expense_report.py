@@ -68,13 +68,14 @@ def parse_json(text: str) -> list[dict]:
 # -----------------------------------------------------------------------------
 
 def categorize(vendor: str, categories: dict) -> str:
-    """Return the category for `vendor` based on `categories`.
+    vendor_upper = vendor.upper()
 
-    `categories` maps {category_name: [keyword, keyword, ...]}.
-    A vendor matches a category if any of the keywords appears in the
-    vendor name (case-insensitive). Return "other" if no category matches.
-    """
-    raise NotImplementedError("Part 2: implement categorize")
+    for category, keywords in categories.items():
+        for keyword in keywords:
+            if keyword in vendor_upper:
+                return category 
+            
+    return "other"
 
 
 # -----------------------------------------------------------------------------
