@@ -1,0 +1,4 @@
+My Observations:
+1. The code that is reading and parses the CSV file is directly in the main() function. This makes the code harder to support other formats like JSON. If they added a fucntion in to switch the parsing that it would be better. 
+2. The category mapping in also directly in the main() fucntion, and its in there as a dictionary. This makes it so any changes to categories have to be done with the actual code, instead of updating a file, which would make the program so much more flexible. 
+3. This code mixes reading and computing tables, and printing results all in one singular place. This makes it very hard when your trying to test only the logic of the code. 
