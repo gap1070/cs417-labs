@@ -27,13 +27,16 @@ from pathlib import Path
 # -----------------------------------------------------------------------------
 
 def parse_csv(text: str) -> list[dict]:
+    # converts csv text into row strcutures dictionaries 
     rows = []
 
     lines = text.strip().split("\n")
 
+    # Skips the header 
     for line in lines[1:]:
         parts = line.split(",")
 
+        # Skips the malformed rows 
         if len(parts) != 4:
             continue 
 
@@ -49,6 +52,7 @@ def parse_csv(text: str) -> list[dict]:
     return rows 
 
 def parse_json(text: str) -> list[dict]:
+    # converts the JSON strings into CSV 
     data = json.loads(text)
 
     rows = []
@@ -68,13 +72,16 @@ def parse_json(text: str) -> list[dict]:
 # -----------------------------------------------------------------------------
 
 def categorize(vendor: str, categories: dict) -> str:
+    # makes the vendors so they arent case sensitive 
     vendor_upper = vendor.upper()
 
+    # checks all the categories and their keywords 
     for category, keywords in categories.items():
         for keyword in keywords:
             if keyword in vendor_upper:
                 return category 
-            
+    
+    # returns the default category if nothing else matches 
     return "other"
 
 
@@ -83,11 +90,19 @@ def categorize(vendor: str, categories: dict) -> str:
 # -----------------------------------------------------------------------------
 
 def build_report(rows: list[dict], categories: dict) -> dict:
-    """Return {category_name: total_amount} for a list of parsed rows.
+    # computes the total for every category 
+    totals = {}
 
-    Pure: must NOT open files, read stdin, or print anything.
-    """
-    raise NotImplementedError("Part 3: implement build_report")
+    for row in rows:
+        vendor = row["vendor"]
+        amount = float(row["amount"])
+
+        category = categorize(vendor, categories)
+
+        # Gets the totals fof the categories safely
+        totals[category] = totals.get(category, 0.0) + amount 
+
+    return totals 
 
 
 # -----------------------------------------------------------------------------
@@ -97,39 +112,25 @@ def build_report(rows: list[dict], categories: dict) -> dict:
 # -----------------------------------------------------------------------------
 
 def main():
-    rows = []
+    # reads the files 
     with open("data/transactions.csv") as f:
-        for line in f.readlines()[1:]:
-            parts = line.strip().split(",")
-            if len(parts) != 4:
-                continue
-            rows.append(parts)
+        text = f.read()
+    
+    # Parses the CSv into a more structured data set 
+    rows = parse_csv(text)
 
-    categories = {
-        "STARBUCKS": "food",
-        "DUNKIN": "food",
-        "WHOLEFOODS": "food",
-        "WHOLE FOODS": "food",
-        "SHELL": "gas",
-        "EXXON": "gas",
-        "AMAZON": "shopping",
-        "TARGET": "shopping",
-        "NETFLIX": "entertainment",
-        "SPOTIFY": "entertainment",
-        "HARDWARE": "home",
-    }
+    # Loads the different categories from the configuration file 
+    categories = json.loads(Path("data/categories.json").read_text())
 
-    totals = {}
-    for date, vendor, amount, _ in rows:
-        cat = "other"
-        for key, c in categories.items():
-            if key in vendor.upper():
-                cat = c
-        totals[cat] = totals.get(cat, 0.0) + float(amount)
+    # Builds the totals using logic 
+    totals = build_report(rows, categories)
 
+    # prints the results 
     print("=== Expense Report ===")
+
     for cat, total in sorted(totals.items()):
         print(f"  {cat:<15} ${total:>8.2f}")
+        
     print(f"  {'TOTAL':<15} ${sum(totals.values()):>8.2f}")
 
 
